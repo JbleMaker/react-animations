@@ -1,0 +1,12 @@
+{
+  "files": {
+    "main.css": "/JbleMaker/react-animations/static/css/main.5a89d673.css",
+    "main.js": "/JbleMaker/react-animations/static/js/main.6797fe02.js",
+    "index.html": "/JbleMaker/react-animations/index.html",
+    "main.6797fe02.js.map": "/JbleMaker/react-animations/static/js/main.6797fe02.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.5a89d673.css",
+    "static/js/main.6797fe02.js"
+  ]
+}
