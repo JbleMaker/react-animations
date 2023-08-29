@@ -1,12 +1,12 @@
 {
   "files": {
     "main.css": "/react-animations/static/css/main.5a89d673.css",
-    "main.js": "/react-animations/static/js/main.e7cd30ac.js",
+    "main.js": "/react-animations/static/js/main.5c075cd8.js",
     "index.html": "/react-animations/index.html",
-    "main.e7cd30ac.js.map": "/react-animations/static/js/main.e7cd30ac.js.map"
+    "main.5c075cd8.js.map": "/react-animations/static/js/main.5c075cd8.js.map"
   },
   "entrypoints": [
     "static/css/main.5a89d673.css",
-    "static/js/main.e7cd30ac.js"
+    "static/js/main.5c075cd8.js"
   ]
 }
