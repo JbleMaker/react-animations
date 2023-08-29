@@ -23,7 +23,6 @@ time, mark, audio, video {
   margin: 0;
   padding: 0;
   border: 0;
-  font-size: 62.5%;
   font: inherit;
   vertical-align: baseline;
 }
@@ -56,11 +55,16 @@ table {
 }
 body{
   font-family: 'Noto Sans KR', sans-serif;
-  background:linear-gradient(135deg,#e09,#d0e);
+  background-color:#191919;
+  /* background:linear-gradient(135deg,#e09,#d0e); */
   color:${(props) => props.theme.textColor}
 }
 a{
   text-decoration:none;
+}
+html{
+  font-size: 62.5%;
+  box-sizing:border-box;
 }
 `;
 

@@ -1,83 +1,114 @@
-import React from "react";
-import { styled } from "styled-components";
-import { motion } from "framer-motion";
+import React, { useRef } from "react";
+import { useMotionValue, useScroll, useTransform } from "framer-motion";
+import $ from "jquery";
 
-const Wrapper = styled.div`
-  height: 100vh;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-
-const Box = styled(motion.div)`
-  width: 20rem;
-  height: 20rem;
-  background-color: rgba(255, 255, 255, 0.2);
-  border-radius: 30px;
-  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1), 0 10px 20px rgba(0, 0, 0, 0.06);
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-`;
-
-const CricleBox = styled(motion.div)`
-  width: 7.5rem;
-  height: 7.5rem;
-  border-radius: 50%;
-  background-color: #ffffff;
-  place-self: center;
-  text-align: center;
-  font-size: 2rem;
-`;
-
-const TestBox = styled(motion.div)`
-  width: 7.5rem;
-  height: 7.5rem;
-  border-radius: 50%;
-  background-color: #ffffff;
-  place-self: center;
-  text-align: center;
-  font-size: 2rem;
-`;
-
-const boxVariants = {
-  start: {
-    opacity: 0,
-    scale: 0.5,
-  },
-  end: {
-    scale: 1,
-    opacity: 1,
-    transition: {
-      type: "spring",
-      duration: 0.5,
-      bounce: 0.5,
-      staggerChildren: 0.1,
-      delayChildren: 0.3,
-    },
-  },
-};
-
-const CircleVariants = {
-  start: {
-    opacity: 0,
-    x: 10,
-  },
-  end: {
-    opacity: 1,
-    x: 0,
-  },
-};
+import {
+  CricleBox,
+  ExplainBox,
+  Naming,
+  ResetBtn,
+  SmallWrapper,
+  Variants,
+  VariantsBox,
+  Wrapper,
+} from "./components/styled-Variants";
+import { CircleVariants, animation, boxVariants } from "./variants";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faRotateRight } from "@fortawesome/free-solid-svg-icons";
+import { Animation, AnimationBox } from "./components/styled-animation";
+import { Gestures, GesturesBox } from "./components/styled-Gestures";
+import { Drag, DragBox, Movement } from "./components/styled-Drag";
+import { Scroll, ScrollBox } from "./components/styled-Scroll";
 
 function App() {
+  const dragRef = useRef<HTMLDivElement>(null);
+  const x = useMotionValue(0);
+  const rotateZ = useTransform(x, [-800, 800], [-360, 360]);
+  const { scrollYProgress } = useScroll();
+
+  const gradient = useTransform(
+    x,
+    [-500, 0, 500],
+    [
+      "linear-gradient(135deg, rgb(0,210,238), rgb(238, 0, 151)",
+      "linear-gradient(135deg, rgb(0, 4, 238), rgb(143, 0, 238)",
+      "linear-gradient(135deg, rgb(139, 0, 238), rgb(238, 0, 83)",
+    ]
+  );
+
+  const scrollMove = useTransform(scrollYProgress, [0, 1], [1, 5]);
+
   return (
     <Wrapper>
-      <Box variants={boxVariants} initial="start" animate="end">
-        <CricleBox variants={CircleVariants}>font</CricleBox>
-        <TestBox variants={CircleVariants}>font</TestBox>
-        <CricleBox variants={CircleVariants} />
-        <CricleBox variants={CircleVariants} />
-      </Box>
+      <SmallWrapper>
+        <Animation>
+          <AnimationBox
+            id="animation"
+            variants={animation}
+            initial="hidden"
+            animate="visible"
+          />
+          <ExplainBox>
+            <Naming>Animation</Naming>
+            <ResetBtn
+              onClick={() => {
+                window.location.reload();
+              }}>
+              <FontAwesomeIcon icon={faRotateRight} />
+            </ResetBtn>
+          </ExplainBox>
+        </Animation>
+
+        <Variants>
+          <VariantsBox variants={boxVariants} initial="start" animate="end">
+            <CricleBox variants={CircleVariants} />
+            <CricleBox variants={CircleVariants} />
+            <CricleBox variants={CircleVariants} />
+            <CricleBox variants={CircleVariants} />
+          </VariantsBox>
+          <ExplainBox>
+            <Naming>Variants</Naming>
+            <ResetBtn>
+              <FontAwesomeIcon icon={faRotateRight} />
+            </ResetBtn>
+          </ExplainBox>
+        </Variants>
+
+        <Gestures>
+          <GesturesBox
+            whileHover={{ scale: 1.4, rotate: 180 }}
+            whileTap={{ scale: 0.5, rotate: -180, borderRadius: "100%" }}
+          />
+          <ExplainBox>
+            <Naming>Gestures</Naming>
+          </ExplainBox>
+        </Gestures>
+
+        <Drag>
+          <DragBox ref={dragRef}>
+            <Movement
+              drag
+              dragSnapToOrigin
+              whileDrag={{ backgroundColor: "#f15bff" }}
+              whileTap={{ borderRadius: "50%" }}
+              dragConstraints={dragRef}
+            />
+          </DragBox>
+          <ExplainBox>
+            <Naming>Drag</Naming>
+          </ExplainBox>
+        </Drag>
+
+        <Scroll style={{ background: gradient }}>
+          <ScrollBox
+            style={{ x, rotateZ, scale: scrollMove }}
+            drag="x"
+            dragSnapToOrigin></ScrollBox>
+          <ExplainBox>
+            <Naming>Scroll</Naming>
+          </ExplainBox>
+        </Scroll>
+      </SmallWrapper>
     </Wrapper>
   );
 }
