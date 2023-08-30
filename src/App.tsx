@@ -1,10 +1,20 @@
-import React, { useRef } from "react";
-import { useMotionValue, useScroll, useTransform, motion } from "framer-motion";
+import React, { useRef, useState } from "react";
+import {
+  useMotionValue,
+  useScroll,
+  useTransform,
+  motion,
+  AnimatePresence,
+} from "framer-motion";
 
 import { CricleBox, Variants, VariantsBox } from "./components/styled-Variants";
 import { CircleVariants, animation, boxVariants } from "./variants";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faRotateRight } from "@fortawesome/free-solid-svg-icons";
+import {
+  faChevronLeft,
+  faChevronRight,
+  faRotateRight,
+} from "@fortawesome/free-solid-svg-icons";
 import { Animation, AnimationBox } from "./components/styled-animation";
 import { Gestures, GesturesBox } from "./components/styled-Gestures";
 import { Drag, DragBox, Movement } from "./components/styled-Drag";
@@ -18,7 +28,20 @@ import {
   SmallWrapper,
   Wrapper,
 } from "./components/styled-Entire";
-import { ApBox, Title } from "./components/styled-aniPresence";
+import {
+  ApBox,
+  MotionBox,
+  MotionBtn,
+  Title,
+  boxMove,
+} from "./components/styled-aniPresence";
+import { MoveBox, MoveCircle } from "./components/styled-toggleMove";
+import {
+  Grid,
+  Overlay,
+  Section,
+  overlay,
+} from "./components/styled-animationSlider";
 
 function App() {
   ////////////////////////Drag
@@ -39,7 +62,24 @@ function App() {
   );
   const scrollMove = useTransform(scrollYProgress, [0, 1], [1, 2]);
 
-  ////////////////////////
+  ////////////////////////Animation Presence
+  const [visible, setVisible] = useState(1);
+  const [back, setBack] = useState(false);
+  const nextItem = async () => {
+    await setBack(false);
+    await setVisible((prev) => (prev === 10 ? 10 : prev + 1));
+  };
+  const beforeItem = async () => {
+    await setBack(true);
+    await setVisible((prev) => (prev === 1 ? 1 : prev - 1));
+  };
+
+  ///////////////////////// Animatiom Move and Connect
+  const [clicked, setClicked] = useState(false);
+  const toggleClicked = () => setClicked((prev) => !prev);
+
+  ///////////////////////// Animation Slider
+  const [id, setId] = useState<null | string>(null);
 
   return (
     <Wrapper>
@@ -140,7 +180,67 @@ function App() {
 
       <AniPresence>
         <Title>Animation Presence</Title>
-        <ApBox></ApBox>
+        <ApBox>
+          <AnimatePresence custom={back}>
+            <MotionBox
+              custom={back}
+              key={visible}
+              variants={boxMove}
+              initial="entry"
+              animate="center"
+              exit="exit">
+              {visible}
+            </MotionBox>
+          </AnimatePresence>
+          <MotionBtn onClick={beforeItem}>
+            <FontAwesomeIcon icon={faChevronLeft} />
+          </MotionBtn>
+          <MotionBtn onClick={nextItem}>
+            <FontAwesomeIcon icon={faChevronRight} />
+          </MotionBtn>
+        </ApBox>
+      </AniPresence>
+
+      <AniPresence>
+        <ApBox
+          onClick={toggleClicked}
+          style={{ justifyContent: "space-around" }}>
+          <MoveBox>
+            {clicked ? (
+              <MoveCircle layoutId="circle" style={{ borderRadius: 50 }} />
+            ) : null}
+          </MoveBox>
+          <MoveBox>
+            {!clicked ? (
+              <MoveCircle
+                layoutId="circle"
+                style={{ borderRadius: 10, scale: 2 }}
+              />
+            ) : null}
+          </MoveBox>
+        </ApBox>
+      </AniPresence>
+
+      <AniPresence>
+        <ApBox>
+          <Grid>
+            {["1", "2", "3", "4"].map((n) => (
+              <Section onClick={() => setId(n)} key={n} layoutId={n} />
+            ))}
+          </Grid>
+          <AnimatePresence>
+            {id ? (
+              <Overlay
+                onClick={() => setId(null)}
+                variants={overlay}
+                initial="hidden"
+                animate="visible"
+                exit="exit">
+                <Section layoutId={id} style={{ width: 400, height: 200 }} />
+              </Overlay>
+            ) : null}
+          </AnimatePresence>
+        </ApBox>
       </AniPresence>
     </Wrapper>
   );
