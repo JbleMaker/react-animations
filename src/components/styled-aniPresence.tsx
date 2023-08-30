@@ -8,8 +8,8 @@ export const Title = styled.h1`
 `;
 
 export const ApBox = styled(motion.div)`
-  width: 100vmin;
-  height: 50vmin;
+  width: 100rem;
+  height: 50rem;
   background: linear-gradient(135deg, #b814ff, #6912ff);
   border-radius: 3vmin;
 `;

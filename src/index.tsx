@@ -57,7 +57,7 @@ body{
   font-family: 'Noto Sans KR', sans-serif;
   background-color:#191919;
   /* background:linear-gradient(135deg,#e09,#d0e); */
-  color:${(props) => props.theme.textColor}
+  color:${(props) => props.theme.textColor};  
 }
 a{
   text-decoration:none;
